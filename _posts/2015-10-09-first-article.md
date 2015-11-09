@@ -3,7 +3,9 @@ layout: default
 title: 写在前面
 ---
 
-##{{ page.title }}
+{{ page.title }}
+
+-------
 
 >####作者:admos_han 
 
