@@ -3,7 +3,7 @@ layout: default
 title:写在前面
 ---
 
-> {{ page.title }}
+{{ page.title }}
 
 ####作者：admos_han 日期：{{ page.date | date_to_string }}
 
