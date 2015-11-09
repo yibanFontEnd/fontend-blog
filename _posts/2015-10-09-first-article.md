@@ -1,9 +1,13 @@
 ---
 layout: default
-title: 你好，世界
+title:写在前面
+author:admos_han 
 ---
 
 {{ page.title }}
+
 {{page.author}}
+
 >我的第一篇文章
-###**{{ page.date | date_to_string }}**
+
+###日期：**{{ page.date | date_to_string }}**
