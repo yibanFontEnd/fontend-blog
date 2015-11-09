@@ -6,7 +6,7 @@ author:admos_han
 
 {{ page.title }}
 
-{{page.author}}
+作者：{{page.author}}
 
 >我的第一篇文章
 
