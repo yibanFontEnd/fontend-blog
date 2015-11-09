@@ -1,6 +1,6 @@
 ---
 layout: default
-title:写在前面
+title: 写在前面
 ---
 
 {{ page.title }}
