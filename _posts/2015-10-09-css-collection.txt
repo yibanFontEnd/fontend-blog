@@ -1,6 +1,6 @@
 ---
 layout: default
-title: 写在前面
+title: css基础复习
 ---
 
 ##{{ page.title }}
