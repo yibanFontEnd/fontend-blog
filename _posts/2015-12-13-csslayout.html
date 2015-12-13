@@ -1,0 +1,224 @@
+<h2 style='text-align:center'>css 中的各种居中</h2>
+
+居中是布局的一种，布局的失误是一级事故。如果说页面上因为某些元素的没有加载，或者没有渲染，而导致布局乱掉了，这是不可以接受的，所以我们在布局的时候应该考虑到这一点去做相应的兜底。
+
+在css布局中，最重要的，使用的最多得恐怕就是居中了，水平居中，垂直居中，水平垂直居中，为什么居中用的这样多？因为它在视觉上是和谐的。
+
+诚然，我们可以通过计算像素值来居中，可是这是有问题的，第一，很繁琐，每一个元素都要手动去算一遍，第二，非常死板，不利于动态的去添加删除元素，而且元素越多，计算越复杂。第三，在屏幕越来越多的情况下，布局越来越困难。第四，不利于样式的复用。
+
+所以，如何来使得元素自己居中就显得很重要，让浏览器去帮你计算
+
+常用的居中有，margin大法居中，浮动居中，绝对定位居中，inline-block居中，table居中，flex居中,其中叫法有很多，比如说绝对居中，可能指代两种居中的方法。其中有一些，可能只是水平居中而无法垂直居中，这些会在讲解的过程中去提及和比较，我不会着重去比较优劣，因为优劣是相对于应用场景来谈的，脱离了应用场景，谈优劣是没有意义的。
+
+1. margin 大法居中
+这是比较常用的了，我们通过设置
+
+margin: 0 auto;或者
+
+margin: 0 auto 0 auto;
+来使其居中，
+当然很显然margin:auto;也会达到同样的效果，这个方法的精髓是margin-left 和margin-right设置为auto从而使得其居中，至于上下，设置为auto没有效果，所以，随便你。
+margin只能使得水平居中，无法垂直居中，写一个小例子：
+
+<pre>
+	.father{
+		background-color: #2af;
+		width: 100px;
+		height: 100px;
+	}
+	.son{
+		background-color: #000;
+		width: 40px;
+		height: 20px;
+		margin:auto;
+	}
+
+	<div class="father">
+		<div class="son">
+		
+		</div>
+	</div>
+</pre>
+我比较懒，只设置一个auto就ok，下面如果想设置margin-top和margin-bottom 再设置覆盖就好了。
+很多使用者，发现margin大法不起作用了，骚年，去check下，这个时候其实不是margin大法没起作用，而是其起作用了，你肉眼看不出来而已，因为你没给子元素设置宽度，默认的子元素是充满父元素的，所以你居中了，但是看不出来。
+为什么margin大法不能垂直居中呢，其实，最后看下来，我们发现水平居中总比垂直居中要容易的，因为人得习惯是从左向右，再从上向下的，也就是左右要先完结，然后才是向下，宽度要是有界的，而高度是要无界的，我们可以把鼠标的滑轮一直向下滚动，但是不能一直向右滚动。所以css2.1中为水平的auto，规定了在containing的中间，对高度上则没有相关规定。
+
+2.绝对定位居中
+
+这里紧接着讲绝对定位的原因是，和margin很像
+我们上面说到margin大法无法垂直居中，事实上其实是可以的，只要进行一些处理就可以了，先上例子：
+	<pre>
+	.father{
+		background-color: #2af;
+		width: 100px;
+		height: 100px;
+		position: relative;
+	}
+	.son{
+		background-color: #000;
+		width: 40px;
+		height: 20px;
+		top: 0px;
+		bottom: 0px;
+		left: 0px;
+		right: 0px;
+		margin: auto;
+		position: absolute;
+	}
+	<div class="father">
+		<div class="son">
+		
+		</div>
+	</div>
+	</pre>
+	效果拔群有木有,为什么这里可以水平垂直居中呢？
+	这要从css2.1规定的计算式上看,是可以理解的，这里讲会很长，建议移步：
+	<a>http://segmentfault.com/q/1010000000689833</a>
+
+	3 绝对定位的另一种居中：
+	这种居中是相对来说所有浏览器都可用的，
+	<pre>
+		.father{
+		background-color: #2af;
+		width: 100px;
+		height: 100px;
+		position: relative;
+	}
+	.son{
+		background-color: #000;
+		width: 40px;
+		height: 20px;
+		left: 50%;
+		top: 50%;
+		margin-top: -10px;
+		margin-left: -20px;
+		position: absolute;
+	}
+		<div class="father">
+		<div class="son">
+		
+		</div>
+	</div>
+</pre>
+	这种居中，也是绝对定位居中的一种，设置left ，top为50%，这样子元素的定位点就确定了，然后margin-top margin-left都设置为原来宽高的一半，就等于是子元素把自己沿着定位点移动了宽高的一半，到了自己的中心，
+	这种方法很直观，也非常好理解啊。所以浏览器兼容比较好。也比较实用。
+
+	4.浮动居中
+	上面的居中都是在定宽定高的情况下进行居中的，很好用，但是有时候我们可能无法得知一个元素的确切的高或者宽，当然，我们可以通过js去计算，但是，这样会使得我们的代码很丑陋，应尽可能的剥离展现和逻辑
+	通过浮动居中，可以在不定宽的情况下进行居中，注意，这里其实讲了两层意思，一层是 不定宽 ，第二层是 居中
+	在浮动居中中，浮动层主要是为了解决不定宽的问题，因为浮动的元素会被其内的元素撑开，居中其实还是使用的上面的position的定位来居中的，上代码：
+	<pre>
+		.father{
+		background-color: #2af;
+		width: 100px;
+		height: 100px;
+		position: relative;
+	}
+	.son{
+		background-color: #000;
+		width: 40px;
+		height: 20px;
+		position: relative;
+		left: -50%;
+		clear: both;
+		top: -10px;
+	}
+	.floater{
+		left: 50%;
+		top: 50%;
+		float: left;
+		position: relative;
+
+	}
+
+	<div class="father">
+	<div class="floater">
+		
+		<div class="son">
+		
+		</div>
+	</div>
+</div>
+</pre>
+	这里可能看上去比较复杂，其实很简单，就是上面的居中方法+浮动，首先，父元素给一个position，给relative把，absolute威力太强大，然后浮动的元素，也给了一个position为relative，这个比较关键，首先，浮动是为了使得其内的子元素可以不定宽，设置position是为了用上面的方法3来实现居中。注意当你为了使垂直方向也居中的时候，设置top：-10px;为什么这里不能使用magin-bottom呢，因为这是一个嵌套盒，且外面的元素是float的，float的元素会被其内的元素撑开，意思也就是，float和其内的son是贴在一起的，son变大float变大，margin-bottom是没有效果的。
+	这个方法，颇有点集成的意思，可以称作为水平居中的解决方案了，甚至可以兼容垂直居中了，比较考验理解
+
+5 inline-block 居中
+
+关于inline-block居中，现在用的比较多，设置display为inline-block顾名思义，使得块级元素像行内元素一样，同时又可以设置margin-top和margin-bottom,是现在比较常用的一种居中方式，而且它比较于浮动的好处在于，它不需要清除浮动，一般来说，设计到浮动总会有很多的bug，所以inline-block这种特殊而又兼容性还不错的元素自然很受欢迎，先上代码
+	<pre>
+	.father{
+		background-color: #2af;
+		width: 100px;
+		height: 100px;
+		position: relative;
+		text-align: center;
+		line-height: 100px;
+	}
+	.son{
+		background-color: #000;
+		width: 40px;
+		height: 20px;
+		display: inline-block;
+	}
+	<div class="father">
+		<div class="son">
+		
+		</div>
+</div>
+</pre>
+设置dispaly为inline-block非常简单，两个属性即可完成水平垂直居中，而且兼容性还不差，它的缺点在于小，只能在页面的小的布局上去使用它，懒人必备，谁用谁知道。
+
+6 还是和display有关的，只不过是设置其为display:tabel-cell,很好理解，其问题在于低版本的IE，当然对于display为inline-block也存在类似的问题，可是IE6,IE7对于table-cell就是完全不认识啊。
+<pre>
+	.father{
+		background-color: #2af;
+		width: 100px;
+		height: 100px;
+		display: table-cell;
+		vertical-align: middle;
+	}
+	.son{
+		background-color: #000;
+		width: 40px;
+		height: 20px;
+		margin: auto;
+	}
+
+	<div class="father">
+		<div class="son">
+		
+		</div>
+</div>
+</pre>
+7使用flex来布局
+这个的问题是浏览器兼容的问题，毕竟css3,只能说，酌情使用把。使用flex的便利和display为inline-block一样，只要两个属性即可实现，忽略下面代码里面的浏览器前缀
+<pre>
+	.father{
+	width: 100px;
+	height: 50px;
+	background-color: #2f9;
+    display: -ms-flex;
+    display: -webkit-flex;
+    display: flex;
+    justify-content:center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+
+    align-items: center;
+	}
+	.son{
+		background-color: #000;
+		width: 40px;
+		height: 20px;
+	}
+
+	<div class="father">
+		<div class="son">
+		
+		</div>
+</div>
+</pre>
+以上就是常用的居中方法，算是一个总结，越是简单的例子越容易说明问题，在实际使用中还是要结合场景，没有什么情况下都最优的，只有更适合使用场景的。	
+
